@@ -39,17 +39,22 @@ def sitemap():
 @app.route('/user', methods=['GET'])
 def handle_hello():
 
-    response_body = {
-        "msg": "Hello, this is your GET /user response "
-    }
+    all_users = User.query.all()
+    all_users = list(map(lambda user: user.serialize(), all_users))
+    
+    return jsonify(all_users), 200
 
-    return jsonify(response_body), 200
 
 
 @app.route("/people", methods=["GET"])
 def get_all_people():
 
-     return jsonify({
+    all_people = People.query.all()
+    all_people = list(map(lambda people: people.serialize(), all_people))
+    
+    return jsonify(all_people), 200
+
+    return jsonify({
         "mensaje": "aca deben estar todos los personajes de sw"
     })
 
