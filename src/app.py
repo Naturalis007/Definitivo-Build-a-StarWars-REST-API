@@ -93,7 +93,36 @@ def get_one_planets(id):
         "mensaje": "esta es la informacion del planeta con id"+str(id)
     })
 
+@app.route("/favorite/planet/<int:planet_id>", methods=["POST"])
+def post_fav_planet(planet_id):
 
+    return jsonify({
+        "mensaje": "el planeta con id" + str(planet_id) + "ha sido agregado"
+    })
+
+
+@app.route("/favorite/people/<int:people_id>", methods=["POST"])
+def post_fav_people(people_id):
+
+    return jsonify({
+        "mensaje": "el personaje con id" + str(people_id) + "ha sido agregado"
+    })
+
+
+@app.route("/favorite/planet/<int:planet_id>", methods=["DELETE"])
+def delete_fav_planet(planet_id):
+
+    return jsonify({
+        "mensaje": "el planeta con id" + str(planet_id) + "ha sido eliminado"
+    })
+
+
+@app.route("/favorite/people/<int:people_id>", methods=["DELETE"])
+def delete_fav_people(people_id):
+
+    return jsonify({
+        "mensaje": "el personaje con id" + str(people_id) + "ha sido eliminado"
+    })
 
 
 
