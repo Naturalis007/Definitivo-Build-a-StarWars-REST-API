@@ -45,6 +45,61 @@ def handle_hello():
 
     return jsonify(response_body), 200
 
+
+@app.route("/people", methods=["GET"])
+def get_all_people():
+
+     return jsonify({
+        "mensaje": "aca deben estar todos los personajes de sw"
+    })
+
+
+@app.route("/planets", methods=["GET"])
+def get_all_planets():
+
+     return jsonify({
+        "mensaje": "aca deben estar todos los planetas de sw"
+    })
+
+
+@app.route("/users", methods=["GET"])
+def get_all_users():
+
+     return jsonify({
+        "mensaje": "aca deben estar todos los usuarios"
+    })
+
+
+@app.route("/users/favorites", methods=["GET"])
+def get_all_users_fav():
+
+     return jsonify({
+        "mensaje": "aca deben estar todos los favoritos de los usuarios"
+    })
+
+
+@app.route("/people/<int:id>", methods=["GET"])
+def get_one_people(id):
+    
+    return jsonify({
+        "mensaje": "esta es la informacion del personaje con id"+str(id)
+    })
+
+
+@app.route("/planets/<int:id>", methods=["GET"])
+def get_one_planets(id):
+    
+    return jsonify({
+        "mensaje": "esta es la informacion del planeta con id"+str(id)
+    })
+
+
+
+
+
+
+
+
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 3000))
