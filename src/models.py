@@ -62,3 +62,18 @@ class Fav_People(db.Model):
             "email": self.name,
          }
 
+class Fav_Planets(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    planets_name = db.Column(db.String(120), db.Foreign.Key("planets.name"))
+    user_fav = db.Column(db.String(120), db.Foreign.Key("user.email"))
+    rel_planets = db.relationship("Planets")
+    rel_user = db.relationship("User")
+
+    def __repr__(self):
+        return '<Favorites %r>' % self.name
+    
+    def serialize(self):
+        return {
+            "id": self.id,
+            "email": self.name,
+         }
