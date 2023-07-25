@@ -37,13 +37,15 @@ def handle_invalid_usage(error):
 def sitemap():
     return generate_sitemap(app)
 
-@app.route('/user', methods=['GET'])
-def handle_hello():
 
+@app.route("/user", methods=["GET"])
+def get_all_users():
     all_users = User.query.all()
     all_users = list(map(lambda user: user.serialize(), all_users))
-    
     return jsonify(all_users), 200
+    return jsonify({
+        "mensaje": "aca deben estar todos los usuarios"
+    })
 
 
 
@@ -71,22 +73,6 @@ def get_all_planets():
         "mensaje": "aca deben estar todos los planetas de sw"
     })        
     
-
-
-@app.route("/users", methods=["GET"])
-def get_all_users():
-
-     return jsonify({
-        "mensaje": "aca deben estar todos los usuarios"
-    })
-
-
-@app.route("/users/favorites", methods=["GET"])
-def get_all_users_fav():
-
-     return jsonify({
-        "mensaje": "aca deben estar todos los favoritos de los usuarios"
-    })
 
 
 @app.route("/people/<int:id>", methods=["GET"])
