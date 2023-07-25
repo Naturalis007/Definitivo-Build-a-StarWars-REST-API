@@ -8,7 +8,8 @@ from flask_swagger import swagger
 from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
-from models import db, User
+from models import db, User, People, Planets, Fav_Planets, Fav_People
+
 #from models import Person
 
 app = Flask(__name__)
@@ -62,9 +63,14 @@ def get_all_people():
 @app.route("/planets", methods=["GET"])
 def get_all_planets():
 
-     return jsonify({
+    all_planets = Planets.query.all()
+    all_Planets = list(map(lambda planets: planets.serialize(), all_planets))
+
+    return jsonify(all_planets), 200 
+    return jsonify({
         "mensaje": "aca deben estar todos los planetas de sw"
-    })
+    })        
+    
 
 
 @app.route("/users", methods=["GET"])
@@ -84,50 +90,82 @@ def get_all_users_fav():
 
 
 @app.route("/people/<int:id>", methods=["GET"])
-def get_one_people(id):
-    
+def get_one_people(people_id):
+    onepeople = People.query.get(people_id)
+    return jsonify(onepeople.serialize())
     return jsonify({
         "mensaje": "esta es la informacion del personaje con id"+str(id)
     })
 
 
 @app.route("/planets/<int:id>", methods=["GET"])
-def get_one_planets(id):
-    
+def get_one_planets(planets_id):
+    oneplanets = Planets.query.get(planets_id)
+    return jsonify(oneplanets.serialize())
     return jsonify({
         "mensaje": "esta es la informacion del planeta con id"+str(id)
     })
 
 @app.route("/favorite/planet/<int:planet_id>", methods=["POST"])
 def post_fav_planet(planet_id):
-
-    return jsonify({
-        "mensaje": "el planeta con id" + str(planet_id) + "ha sido agregado"
+    one = Planets.query.get(planet_id)
+    user = User.query.get(1)
+    if(one):
+        new_fav = Fav_planets()
+        new_fav.email = user.email
+        new_fav.planets_id = planets_id
+        db.session.add (new_fav)
+        db.session.commit()
+        return jsonify({
+        "mensaje": "el planeta con id" + str(planets_id) + "ha sido agregado"
     })
+    else:
+        raise APIException("No existe planeta", status_code=404)
 
 
 @app.route("/favorite/people/<int:people_id>", methods=["POST"])
 def post_fav_people(people_id):
-
-    return jsonify({
+    one = People.query.get(people_id)
+    user = User.query.get(1)
+    if(one):
+        new_fav = Fav_People()
+        new_fav.email = user.email
+        new_fav.people_id = people_id
+        db.session.add (new_fav)
+        db.session.commit()
+        return jsonify({
         "mensaje": "el personaje con id" + str(people_id) + "ha sido agregado"
     })
+    else:
+        raise APIException("No existe personaje", status_code=404)
 
 
 @app.route("/favorite/planet/<int:planet_id>", methods=["DELETE"])
-def delete_fav_planet(planet_id):
-
-    return jsonify({
-        "mensaje": "el planeta con id" + str(planet_id) + "ha sido eliminado"
+def delete_fav_planet(planets_id):
+    one = Fav_Planets.query.filter_by(planets_id=planets_id).first()
+    user = User.query.get(1)
+    if(one):
+        db.session.delete(one)
+        db.session.commit()
+        return jsonify({
+        "mensaje": "el planeta con id" + str(planets_id) + "ha sido eliminado"
     })
+    else:
+        raise APIException("No existe planeta", status_code=404)
 
 
 @app.route("/favorite/people/<int:people_id>", methods=["DELETE"])
 def delete_fav_people(people_id):
-
-    return jsonify({
+    one = Fav_People.query.filter_by(people_id=people_id).first()
+    user = User.query.get(1)
+    if(one):
+        db.session.delete(one)
+        db.session.commit()
+        return jsonify({
         "mensaje": "el personaje con id" + str(people_id) + "ha sido eliminado"
     })
+    else:
+        raise APIException("No existe personaje seleccionado", status_code=404)
 
 
 
