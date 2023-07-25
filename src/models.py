@@ -34,12 +34,12 @@ class People(db.Model):
          }
 
 
-class Planets(db.Model):
+class Planet(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), unique=True, nullable=False)
 
     def __repr__(self):
-        return '<Planets %r>' % self.name
+        return '<Planet %r>' % self.name
     
     def serialize(self):
         return {
@@ -49,7 +49,7 @@ class Planets(db.Model):
 
 class Fav_People(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    people_name = db.Column(db.String(120), db.ForeignKey("people.id"))
+    people_id = db.Column(db.String(120), db.ForeignKey("people.id"))
     email = db.Column(db.String(120), db.ForeignKey("user.email"))
     rel_people = db.relationship("People")
     rel_user = db.relationship("User")
@@ -66,17 +66,17 @@ class Fav_People(db.Model):
 
 class Fav_Planets(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    planets_name = db.Column(db.String(120), db.ForeignKey("planets.id"))
+    planet_id = db.Column(db.String(120), db.ForeignKey("planet.id"))
     email = db.Column(db.String(120), db.ForeignKey("user.email"))
-    rel_planets = db.relationship("Planets")
+    rel_planet = db.relationship("Planet")
     rel_user = db.relationship("User")
 
     def __repr__(self):
-        return '<Fav_planets %r>' % self.email
+        return '<Fav_planet %r>' % self.email
     
     def serialize(self):
         return {
             "id": self.id,
             "email": self.email,
-            "planets_name": self.planet_name,
+            "planet_name": self.planet_name,
          }
